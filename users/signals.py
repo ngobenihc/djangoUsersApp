@@ -13,7 +13,7 @@ def creter_user_profile(sender,instance,created,**kwargs):
 
 @receiver(pre_save,sender=User)
 def generate_username(sender,instance,**kwargs):
-    if instance.username:
+    if not instance.username:
         username = f"{instance.first_name}_{instance.last_name}".lower()
         conuter = 1
         while User.objects.filter(username = username):

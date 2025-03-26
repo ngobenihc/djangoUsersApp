@@ -5,6 +5,7 @@ from rest_framework import serializers
 class UserSerializer(serializers.ModelSerializer):
     username = serializers.CharField(read_only=True)
     password =serializers.CharField(write_only=True,required=False)
+    old_password =serializers.CharField(write_only=True,required=False)
 
     def create(self, validated_data):
         password = validated_data.pop("password")
@@ -19,11 +20,11 @@ class UserSerializer(serializers.ModelSerializer):
         try:
             user = instance
             password = validated_data.pop("password")
-            odl_password = validated_data.pop("odl_password")
-            if user.check_password(odl_password):
+            old_password = validated_data.pop("old_password")
+            if user.check_password(old_password):
                 user.set_password(password)
             else:
-                raise Exception("odl_password doesn't match")
+                raise Exception("old_password doesn't match")
             user.save()
         except Exception as err:
             raise serializers.ValidationError(err)
@@ -31,4 +32,4 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields=['url','id','username','email','first_name','last_name','password','odl_password']
+        fields=['url','id','username','email','first_name','last_name','password','old_password']

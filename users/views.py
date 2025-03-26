@@ -2,6 +2,7 @@ from django.contrib.auth.models import User
 from django.shortcuts import render
 from rest_framework import viewsets
 
+from users.permissions import UserLoginOrOut
 from users.serializer import UserSerializer
 
 
@@ -9,3 +10,4 @@ from users.serializer import UserSerializer
 class UserViewSets(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class =  UserSerializer
+    permission_classes = [UserLoginOrOut,]
