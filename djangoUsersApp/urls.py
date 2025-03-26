@@ -14,13 +14,19 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.conf import settings
 from django.contrib import admin
 from django.urls import path,include
 from users import router as api_users
 
+auth_urlpatterns = [path("oauth/",include("rest_framework_social_oauth2.urls"))]
+
+if settings.DEBUG:
+    auth_urlpatterns.append(path("verify/",include('rest_framework.urls')))
 
 api_urlpatterns = [
     path('account/', include(api_users.route.urls)),
+    path("auth/",include(auth_urlpatterns)),
 ]
 urlpatterns = [
     path('admin/', admin.site.urls),
